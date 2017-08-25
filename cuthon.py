@@ -39,8 +39,7 @@ def get_first_free():
 
     return Status.no_gpu, e
 
-if __name__ == "__main__":
-
+def main():
     SEP = "--"
     desc = ("Select the first available GPU(s) and run Python. "
             "To pass the script arguments specify '{0}' between "
@@ -80,3 +79,6 @@ if __name__ == "__main__":
 
     cmd_args.insert(0, "python")
     subprocess.call(" ".join(cmd_args), env=os.environ, shell=True)
+
+if __name__ == "__main__":
+    main()
