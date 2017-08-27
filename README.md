@@ -22,7 +22,7 @@ In general, use `cuthon` just like you would use `python`.
 - `cuthon -V` to see the python version number.
 - `cuthon train_model.py` to run your program.
 
-For help or to pass any options to `cuthon` type:
+For help on availabel `cuthon` options type:
 ```
 cuthon -h --
 ```
