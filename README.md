@@ -7,7 +7,7 @@ having to run `nvidia-smi` followed by setting `CUDA_VISIBLE_DEVICES` again
 (when running a python program that is). This script should save you about 11.5 seconds
 per python program launch -- approximately the time it takes to run
 `nvidia-smi` followed by setting the `CUDA_VISIBLE_DEVICES` environment
-variable. I hope you enjoy those having those seconds back as much as I have.
+variable. I hope you enjoy those seconds back as much as I have.
 
 ## Install
 
