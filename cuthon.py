@@ -48,7 +48,7 @@ def get_free(num_gpus):
     return status, free_list
 
 def parse_args(argvs):
-    desc = ("Select the first available GPU(s) and run Python. "
+    desc = ("Select the first unused GPU(s) and run Python. "
             "To pass the script arguments specify '{0}' between "
             "cuthon arguments and arguments to be passed through "
             "to your script. If '{0}' is not specified, then all "
