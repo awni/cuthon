@@ -4,7 +4,6 @@ from __future__ import print_function
 from __future__ import division
 
 import argparse
-import enum
 import os
 import subprocess
 import sys
@@ -13,39 +12,34 @@ import xml.etree.ElementTree as ET
 THRESHOLD = 0.05
 SEP = "--"
 
-class Status(enum.Enum):
-    success = 0
-    no_cuda = 1
-    no_gpus = 2
-
 def get_val(node):
     return int(node.text.split()[0])
 
-def get_free(num_gpus):
-    try:
-        cmd = ["nvidia-smi", "-x", "-q"]
-        nv_stats = subprocess.check_output(cmd)
-    except OSError as e:
-        return Status.no_cuda, 0
+def get_usage():
+    cmd = ["nvidia-smi", "-x", "-q"]
+    nv_stats = subprocess.check_output(cmd)
 
     gpus = ET.fromstring(nv_stats).findall("gpu")
-    free_list = []
+    usage = []
     for e, gpu in enumerate(gpus):
 
         mem = gpu.find("fb_memory_usage")
         tot = get_val(mem.find("total"))
         used = get_val(mem.find("used"))
+        usage.append(used / tot)
+    return usage
 
-        if used / tot < THRESHOLD:
-            free_list.append(e)
+def get_least(usage, num_gpus):
+    least_list = sorted(enumerate(usage),
+                        lambda x : x[1])
+    least_list = zip(*least_list)[0]
+    return least_list[:num_gpus]
 
+def get_free(usage, num_gpus):
+    free_list = [e for e, used in enumerate(usage)
+                    if used < THRESHOLD]
     free_list = free_list[:num_gpus]
-    if len(free_list) == num_gpus:
-        status = Status.success
-    else:
-        status = Status.no_gpus
-
-    return status, free_list
+    return free_list
 
 def parse_args(argvs):
     desc = ("Select the first unused GPU(s) and run Python. "
@@ -55,9 +49,12 @@ def parse_args(argvs):
             "arguments will be passed through.")
     desc = desc.format(SEP)
     parser = argparse.ArgumentParser(description=desc)
-    parser.add_argument("--num_gpus",
-            type=int, default=1,
-            help="The number of GPUs to use.")
+    parser.add_argument("-n", "--num_gpus",
+        type=int, default=1,
+        help="The number of GPUs to use.")
+    parser.add_argument("-l", "--least_used",
+        action="store_true",
+        help="Switch from an unused to a least-used policy.")
 
     argvs = argvs[1:]
     if SEP in argvs:
@@ -72,25 +69,25 @@ def parse_args(argvs):
 
 def main():
 
-    # TODOs
-    # force run on gpu option
-    # run on cpu option
-    # run on cpu if no gpu available option
-    # specify threshold
-
     args, cmd_args = parse_args(sys.argv)
 
-    status, gpus = get_free(args.num_gpus)
-
-    if status == Status.no_gpus:
-        print("Not enough free GPUs found, aborting.")
-        sys.exit(0)
-    elif status == Status.no_cuda:
+    try:
+        usage = get_usage()
+    except OSError as e:
         print("nvidia-smi not found, aborting.")
         sys.exit(0)
-    elif status == Status.success:
-        gpu_env = ",".join(str(gpu) for gpu in gpus)
-        os.environ["CUDA_VISIBLE_DEVICES"] = gpu_env
+
+    if args.least_used:
+        gpus = get_least(usage, args.num_gpus)
+    else:
+        gpus = get_free(usage, args.num_gpus)
+
+    if len(gpus) < args.num_gpus:
+        print("Not enough free GPUs found, aborting.")
+        sys.exit(0)
+
+    gpu_env = ",".join(str(gpu) for gpu in gpus)
+    os.environ["CUDA_VISIBLE_DEVICES"] = gpu_env
 
     subprocess.call(" ".join(cmd_args),
         env=os.environ, shell=True)
