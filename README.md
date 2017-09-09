@@ -47,13 +47,8 @@ optional arguments:
   -l, --least_used      Switch from an unused to a least-used policy.
 ```
 
-Note the `--` separator. This is to distinguish between `cuthon` arguments and
-arguments to `python`. If the `--` is present then all arguments before it are
-passed to `cuthon` and all arguments after are passed to python. If `--` is
-absent all arguments are passed directly to python.
-
 For example, to run on two available GPUs execute
 
 ```
-cuthon -n=2 -- train_model.py
+cuthon -n 2 -- train_model.py
 ```

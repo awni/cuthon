@@ -9,9 +9,10 @@ import cuthon
 
 def test_argparse():
 
-    argvs = ['cuthon.py', '--num_gpus=2', '--']
+    argvs = ['cuthon.py', '--num_gpus=2', '-l', '--']
     exp_args = argparse.Namespace()
     exp_args.num_gpus = 2
+    exp_args.least_used = True
     exp_cmd_args = ['python']
     args, cmd_args = cuthon.parse_args(argvs)
 
@@ -21,6 +22,7 @@ def test_argparse():
     argvs = ['cuthon.py', '--test_args1', '--test_args2']
     exp_args = argparse.Namespace()
     exp_args.num_gpus = 1
+    exp_args.least_used = False
     exp_cmd_args = ['python', '--test_args1', '--test_args2']
     args, cmd_args = cuthon.parse_args(argvs)
 
