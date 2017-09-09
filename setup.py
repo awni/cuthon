@@ -29,7 +29,7 @@ setup(
     keywords='gpu development cuda',
 
     py_modules=["cuthon"],
-    install_requires=["enum"],
+    install_requires=[],
     entry_points={
         'console_scripts': [
             'cuthon=cuthon:main',
