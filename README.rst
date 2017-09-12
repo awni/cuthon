@@ -4,9 +4,9 @@ cuthon
 
 Cuthon is a simple Python script to avoid setting `CUDA_VISIBLE_DEVICES` when
 running python programs on a GPU. The script will find the first *unused*
-GPU(s) then run the program as usual. At its simplest:
+GPU(s) then run the program as usual. At its simplest::
 
-    cuthon my_program.py
+  cuthon my_program.py
 
 This tool is intended for a fairly niche use case: running python programs on
 an interactive node which has more than one GPU. For those that have done this
@@ -16,6 +16,7 @@ setting `CUDA_VISIBLE_DEVICES` again (when running a python program that is).
 -------
 Install
 -------
+Install with `pip`::
 
     pip install cuthon
 
@@ -28,11 +29,11 @@ In general, use `cuthon` just like you would use `python`.
 * `cuthon -V` to see the python version number.
 * `cuthon train_model.py` to run your program.
 
-For help on available `cuthon` options type:
+For help on available `cuthon` options type::
 
     cuthon -h --
 
-The output will be:
+The output will be::
 
     usage: cuthon.py [-h] [-n NUM_GPUS] [-l]
 
@@ -47,6 +48,6 @@ The output will be:
                             The number of GPUs to use.
       -l, --least_used      Switch from an unused to a least-used policy.
 
-For example, to run on two available GPUs execute
+For example, to run on two available GPUs execute::
 
     cuthon -n 2 -- train_model.py
