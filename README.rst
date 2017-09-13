@@ -25,9 +25,10 @@ Usage
 -----
 
 In general, use `cuthon` just like you would use `python`.
-* `cuthon` to launch a python repl.
-* `cuthon -V` to see the python version number.
-* `cuthon train_model.py` to run your program.
+
+- `cuthon` to launch a python repl.
+- `cuthon -V` to see the python version number.
+- `cuthon train_model.py` to run your program.
 
 For help on available `cuthon` options type::
 
