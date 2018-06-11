@@ -32,7 +32,7 @@ def get_usage():
 def get_least(usage, num_gpus):
     least_list = sorted(enumerate(usage),
                         key=lambda x: x[1])
-    least_list = zip(*least_list)[0]
+    least_list = list(zip(*least_list))[0]
     return least_list[:num_gpus]
 
 def get_free(usage, num_gpus):
