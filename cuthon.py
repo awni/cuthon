@@ -75,7 +75,7 @@ def main():
         usage = get_usage()
     except OSError as e:
         print("nvidia-smi not found, aborting.")
-        sys.exit(0)
+        sys.exit(1)
 
     if args.least_used:
         gpus = get_least(usage, args.num_gpus)
@@ -84,13 +84,13 @@ def main():
 
     if len(gpus) < args.num_gpus:
         print("Not enough free GPUs found, aborting.")
-        sys.exit(0)
+        sys.exit(2)
 
     gpu_env = ",".join(str(gpu) for gpu in gpus)
     os.environ["CUDA_VISIBLE_DEVICES"] = gpu_env
 
-    subprocess.call(" ".join(cmd_args),
-        env=os.environ, shell=True)
+    sys.exit(subprocess.call(" ".join(cmd_args),
+                env=os.environ, shell=True))
 
 if __name__ == "__main__":
     main()

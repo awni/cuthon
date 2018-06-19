@@ -10,7 +10,7 @@ desc = ("A simple tool to select the first "
         "available GPU(s) and run Python")
 setup(
     name='cuthon',
-    version='0.4',
+    version='0.5',
     description=desc,
     long_description=long_description,
 
